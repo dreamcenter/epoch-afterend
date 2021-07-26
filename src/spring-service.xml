@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+    <context:component-scan base-package="top.dreamcenter.epoch" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+
+    <bean id="todoMethodAspect" class="top.dreamcenter.todo.TodoMethodAspect"/>
+    <aop:config>
+        <aop:pointcut id="cut" expression="@annotation(top.dreamcenter.todo.TodoB)"/>
+        <aop:aspect ref="todoMethodAspect">
+            <aop:around method="check" pointcut-ref="cut"/>
+        </aop:aspect>
+    </aop:config>
+
+
+    <context:property-placeholder location="classpath:ThirdPartyService.properties" system-properties-mode="NEVER" ignore-unresolvable="true"/>
+    <bean id="apikey" class="java.lang.String">
+        <constructor-arg name="original" value="${APIKEY}"/>
+    </bean>
+    <bean id="chinaZKey" class="java.lang.String">
+        <constructor-arg name="original" value="${CHINAZ.KEY}"/>
+    </bean>
+    <bean id="qWeatherKey" class="java.lang.String">
+        <constructor-arg name="original" value="${QWEATHER.KEY}"/>
+    </bean>
+</beans>
